@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="default_preview">
-        <item>#76afcf</item>
-        <item>#72d3b4</item>
-        <item>#df5a55</item>
+        <item>#3498db</item>
+        <item>#2ecc71</item>
+        <item>#e74c3c</item>
         <item>#f9bb72</item>
         <item>#dd6495</item>
     </string-array>

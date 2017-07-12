@@ -3,7 +3,9 @@ package com.kenny.logistics.ui.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -18,14 +20,19 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.jaeger.library.StatusBarUtil;
 import com.kenny.logistics.R;
 import com.kenny.logistics.ui.adapter.MyPagerAdapter;
 import com.kenny.logistics.ui.base.BaseActivity;
 import com.kenny.logistics.ui.component.NoScrollViewPager;
 import com.kenny.logistics.ui.fragment.FragmentMine;
+import com.kenny.logistics.ui.fragment.FragmentOrder;
 
 import java.util.ArrayList;
 
+import butterknife.BindArray;
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import devlight.io.library.ntb.NavigationTabBar;
 
@@ -39,17 +46,19 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
+    @BindDrawable(R.mipmap.ic_ntbbar_order)
+    Drawable ic_ntbbar_order;
+    @BindDrawable(R.mipmap.ic_ntbbar_customer)
+    Drawable ic_ntbbar_customer;
+    @BindDrawable(R.mipmap.ic_ntbbar_mine)
+    Drawable ic_ntbbar_mine;
+
+    @BindArray(R.array.default_preview)
+    String[] colors;
+
     private FragmentMine fragmentMine;
-    //private FragmentMy fragmentMy;
-    //private FragmentCar fragmentCar;
-    private FragmentTransaction transaction;
-    private FragmentTransaction beginTransaction;
+    private FragmentOrder fragmentOrder;
     private ArrayList<Fragment> fgList;
-    private ScaleAnimation animation;
-    private TranslateAnimation translateAnimation;
-    private boolean isLogin;
-    private RadioButton main_my_button;
-    private RadioGroup radioGroup;
     private Context context;
     private DrawerLayout drawer;
 
@@ -69,108 +78,53 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void initFragmentpager() {
-        fgList = new ArrayList<Fragment>();
+        fgList = new ArrayList<>();
+        fragmentOrder = new FragmentOrder();
         fragmentMine = new FragmentMine();
-        //fragmentCar = new FragmentCar();
+        fgList.add(fragmentOrder);
         fgList.add(fragmentMine);
-        //fgList.add(fragmentCar);
-    }
-
-    @Override
-    public View onCreateView(String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(name, context, attrs);
     }
 
     private void initUI() {
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fgList);
         viewPager.setAdapter(myPagerAdapter);
 
-        final String[] colors = getResources().getStringArray(R.array.default_preview);
-        NavigationTabBar.OnTabBarSelectedIndexListener onTabBarSelectedIndexListener = navigationTabBar.getOnTabBarSelectedIndexListener();
-        navigationTabBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("====", "被点击了" + v.getId());
-            }
-        });
         navigationTabBar.setOnTabBarSelectedIndexListener(new NavigationTabBar.OnTabBarSelectedIndexListener() {
             @Override
             public void onStartTabSelected(NavigationTabBar.Model model, int index) {
                 Log.i("====", "开始被选择" + index);
-                //if (index==2)drawer.openDrawer(navigationView);
+                StatusBarUtil.setColor(HomeActivity.this, Color.parseColor(colors[index]),0);
             }
-
             @Override
             public void onEndTabSelected(NavigationTabBar.Model model, int index) {
-                Log.i("====", "结束被选择" + index);
             }
         });
-        final ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
+
+        ArrayList<NavigationTabBar.Model> models = new ArrayList<>();
         models.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.mipmap.homenormal),
-                        Color.parseColor(colors[0]))
-                        .selectedIcon(getResources().getDrawable(R.mipmap.homeselect))
+                new NavigationTabBar.Model.Builder(ic_ntbbar_order,Color.parseColor(colors[0]))
                         .title("我的订单")
                         .build()
         );
         models.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.mipmap.sort_press),
-                        Color.parseColor(colors[1]))
-                        //.selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
+                new NavigationTabBar.Model.Builder(ic_ntbbar_customer,Color.parseColor(colors[1]))
                         .title("一键下单")
                         .build()
         );
-
         models.add(
-                new NavigationTabBar.Model.Builder(
-                        getResources().getDrawable(R.mipmap.my_press),
-                        Color.parseColor(colors[2]))
-                        //.selectedIcon(getResources().getDrawable(R.drawable.ic_eighth))
+                new NavigationTabBar.Model.Builder(ic_ntbbar_mine,Color.parseColor(colors[2]))
                         .title("个人中心")
                         .build()
         );
-
         navigationTabBar.setModels(models);
         navigationTabBar.setIsTitled(true);
         navigationTabBar.setViewPager(viewPager, 0);
-        navigationTabBar.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(final int position) {
-                navigationTabBar.getModels().get(position).hideBadge();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(final int state) {
-
-            }
-        });
-
-        navigationTabBar.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < navigationTabBar.getModels().size(); i++) {
-                    final NavigationTabBar.Model model = navigationTabBar.getModels().get(i);
-                    navigationTabBar.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            model.showBadge();
-                        }
-                    }, i * 100);
-                }
-            }
-        }, 500);
     }
 
     /**
      * 初始化抽屉
      */
+
     private void initDrawer() {
         //https://segmentfault.com/a/1190000004151222
         if (navigationView != null) {

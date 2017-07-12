@@ -25,12 +25,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:background="@color/white"
             app:ntb_badge_gravity="top"
             app:ntb_badge_position="right"
             app:ntb_scaled="true"
             app:ntb_tinted="true"
-            app:ntb_title_mode="all" />
+            app:ntb_title_mode="all"
+            app:ntb_bg_color="#ecf0f1"
+            app:ntb_inactive_color="#7f8c8d"
+            app:ntb_preview_colors="@array/default_preview"/>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
