@@ -51,6 +51,6 @@ dependencies {
     //listView adapter
     //https://github.com/hongyangAndroid/baseAdapter
     compile 'com.zhy:base-adapter:3.0.3'
-    //
-    compile 'com.beardedhen:androidbootstrap:2.3.1'
+    //MD风格的EditText - MaterialEditText
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
 }
