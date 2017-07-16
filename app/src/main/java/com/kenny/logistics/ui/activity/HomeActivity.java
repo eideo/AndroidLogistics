@@ -25,6 +25,7 @@ import com.kenny.logistics.R;
 import com.kenny.logistics.ui.adapter.MyPagerAdapter;
 import com.kenny.logistics.ui.base.BaseActivity;
 import com.kenny.logistics.ui.component.NoScrollViewPager;
+import com.kenny.logistics.ui.fragment.FragmentCrateOrder;
 import com.kenny.logistics.ui.fragment.FragmentMine;
 import com.kenny.logistics.ui.fragment.FragmentOrder;
 
@@ -82,6 +83,7 @@ public class HomeActivity extends BaseActivity {
         fragmentOrder = new FragmentOrder();
         fragmentMine = new FragmentMine();
         fgList.add(fragmentOrder);
+        fgList.add(new FragmentCrateOrder());
         fgList.add(fragmentMine);
     }
 

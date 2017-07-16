@@ -48,9 +48,12 @@ dependencies {
     //沉浸式状态栏
     //https://github.com/laobie/StatusBarUtil
     compile 'com.jaeger.statusbarutil:library:1.4.0'
-    //listView adapter
+    //Android 万能的Adapter for ListView,RecyclerView,GridView等，支持多种Item类型的情况。
     //https://github.com/hongyangAndroid/baseAdapter
     compile 'com.zhy:base-adapter:3.0.3'
     //MD风格的EditText - MaterialEditText
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    //省市区三级联动
+    //https://github.com/crazyandcoder/citypicker
+    compile 'liji.library.dev:citypickerview:1.1.0'
 }

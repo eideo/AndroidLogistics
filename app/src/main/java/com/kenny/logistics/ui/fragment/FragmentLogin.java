@@ -120,7 +120,7 @@ public class FragmentLogin extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(@NonNull JsonBean<UserToken> userTokenJsonBean) {
+                    public void onNext(@NonNull final JsonBean<UserToken> userTokenJsonBean) {
                         int code = userTokenJsonBean.getError_code();
                         login_progress.setVisibility(View.GONE);
                         if (code == 0) {
@@ -130,6 +130,11 @@ public class FragmentLogin extends BaseFragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    //存储token
+                                    SharedPreferences userinfo = getActivity().getSharedPreferences("userinfo", 0);
+                                    userinfo.edit().putBoolean("isLogin",true)
+                                            .putString("token",userTokenJsonBean.getData().getToken()).commit();
+
                                     login_progress.setVisibility(View.GONE);
                                     Intent intent = new Intent(getActivity(), HomeActivity.class);
                                     startActivity(intent);
