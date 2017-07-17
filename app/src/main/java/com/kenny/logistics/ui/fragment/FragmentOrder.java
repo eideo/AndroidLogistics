@@ -37,6 +37,7 @@ public class FragmentOrder extends BaseFragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     View view;
+    public static FragmentOrder instance;
 
     @Override
     public int getContentViewId() {
@@ -46,6 +47,7 @@ public class FragmentOrder extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        instance = this;
         this.view = view;
         Init();
     }
@@ -83,6 +85,8 @@ public class FragmentOrder extends BaseFragment {
                                 if(item.getOrderCustomer().getStatus().equals("ORDER_PLACE"))
                                 {
                                     viewHolder.setText(R.id.tv_order_status,"待处理");
+                                    viewHolder.setTextColor(R.id.tv_order_status,Color.parseColor("#3498db"));
+                                    viewHolder.setBackgroundColor(R.id.ly,Color.parseColor("#3498db"));
                                 }
                                 else if(item.getOrderCustomer().getStatus().equals("ORDER_TAKING"))
                                 {

@@ -1,13 +1,16 @@
 package com.kenny.logistics.ui.fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.kenny.logistics.R;
 import com.kenny.logistics.api.ApiRetrofit;
 import com.kenny.logistics.model.response.JsonBean;
@@ -47,10 +50,13 @@ public class FragmentCrateOrder extends BaseFragment {
     TextView recive_time;
     @BindView(R.id.send_time)
     TextView send_time;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     View view;
 
     CityPicker cityPicker;
+    Context context;
     @Override
     public int getContentViewId() {
         return R.layout.fragment_create_order;
@@ -61,6 +67,7 @@ public class FragmentCrateOrder extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         InitCityPicker();
         this.view = view;
+        context = getContext();
     }
 
     private void InitCityPicker(){
@@ -160,7 +167,7 @@ public class FragmentCrateOrder extends BaseFragment {
     void onSubmit(){
         SharedPreferences userinfo = getActivity().getSharedPreferences("userinfo", 0);
         String token = userinfo.getString("token","");
-
+        progressBar.setVisibility(View.VISIBLE);
         ApiRetrofit.getInstance().insert_customer(
                 token,
                 send_name.getText().toString(),
@@ -184,13 +191,34 @@ public class FragmentCrateOrder extends BaseFragment {
 
                     @Override
                     public void onNext(@NonNull JsonBean<OrderCustomer> orderCustomerJsonBean) {
+                        progressBar.setVisibility(View.GONE);
                         if(orderCustomerJsonBean.getError_code() == 0){
 
+                            send_name.setText("");
+                            send_phone.setText("");
+                            send_addr.setText("");
+                            send_addr_info.setText("");
+                            recive_name.setText("");
+                            recive_phone.setText("");
+                            recive_addr.setText("");
+                            recive_addr_info.setText("");
+                            send_time.setText("");
+                            recive_time.setText("");
+
+
+                            new MaterialDialog.Builder(context)
+                                    .title("提示")
+                                    .content("下单成功！")
+                                    .positiveText("确定")
+                                    .show();
+
+                            FragmentOrder.instance.Init();
                         }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        progressBar.setVisibility(View.GONE);
                         e.printStackTrace();
                         showSnackar(view, "获取失败：" + e.getLocalizedMessage());
                     }

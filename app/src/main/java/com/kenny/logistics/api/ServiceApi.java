@@ -19,7 +19,7 @@ import retrofit2.http.Query;
 
 //创建RxJava上游 Observable
 public interface ServiceApi {
-    public static final String BASE_URL = "http://192.168.3.21";
+    public static final String BASE_URL = "http://112.124.105.184:81";
 
     //手机号密码登录
     @GET("/v1/user/customer/login_phone")
