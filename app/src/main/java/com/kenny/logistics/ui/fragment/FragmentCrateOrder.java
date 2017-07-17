@@ -1,17 +1,30 @@
 package com.kenny.logistics.ui.fragment;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.kenny.logistics.R;
+import com.kenny.logistics.api.ApiRetrofit;
+import com.kenny.logistics.model.response.JsonBean;
+import com.kenny.logistics.model.response.order.OrderCustomer;
 import com.kenny.logistics.ui.base.BaseFragment;
 import com.lljjcoder.citypickerview.widget.CityPicker;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FragmentCrateOrder extends BaseFragment {
     @BindView(R.id.send_name)
@@ -19,7 +32,7 @@ public class FragmentCrateOrder extends BaseFragment {
     @BindView(R.id.send_phone)
     EditText send_phone;
     @BindView(R.id.send_addr)
-    EditText send_addr;
+    TextView send_addr;
     @BindView(R.id.send_addr_info)
     EditText send_addr_info;
     @BindView(R.id.recive_name)
@@ -27,13 +40,15 @@ public class FragmentCrateOrder extends BaseFragment {
     @BindView(R.id.recive_phone)
     EditText recive_phone;
     @BindView(R.id.recive_addr)
-    EditText recive_addr;
+    TextView recive_addr;
     @BindView(R.id.recive_addr_info)
     EditText recive_addr_info;
     @BindView(R.id.recive_time)
-    EditText recive_time;
+    TextView recive_time;
     @BindView(R.id.send_time)
-    EditText send_time;
+    TextView send_time;
+
+    View view;
 
     CityPicker cityPicker;
     @Override
@@ -45,6 +60,7 @@ public class FragmentCrateOrder extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         InitCityPicker();
+        this.view = view;
     }
 
     private void InitCityPicker(){
@@ -79,7 +95,11 @@ public class FragmentCrateOrder extends BaseFragment {
                 String city = citySelected[1];
                 //区县（如果设定了两级联动，那么该项返回空）
                 String district = citySelected[2];
-                send_name.setText(province+"/"+city+"/"+district);
+                if(type==0)
+                    send_addr.setText(province+"/"+city+"/"+district);
+                else
+                    recive_addr.setText(province+"/"+city+"/"+district);
+
             }
             @Override
             public void onCancel() {
@@ -88,9 +108,98 @@ public class FragmentCrateOrder extends BaseFragment {
 
     }
 
+    int type = 0;
+    @OnClick(R.id.send_addr)
+    void onSendAddrClick(){
+        type = 0;
+        cityPicker.show();
+    }
+
+
+    @OnClick(R.id.recive_addr)
+    void onReciveAddrClick(){
+        type = 1;
+        cityPicker.show();
+    }
+
     @OnClick(R.id.send_time)
     void onSendTimeClick(){
-        cityPicker.show();
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        send_time.setText(year+"/"+monthOfYear+"/"+dayOfMonth);
+                    }
+                },
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    @OnClick(R.id.recive_time)
+    void onReciveTimeClick(){
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        recive_time.setText(year+"/"+monthOfYear+"/"+dayOfMonth);
+                    }
+                },
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    @OnClick(R.id.button)
+    void onSubmit(){
+        SharedPreferences userinfo = getActivity().getSharedPreferences("userinfo", 0);
+        String token = userinfo.getString("token","");
+
+        ApiRetrofit.getInstance().insert_customer(
+                token,
+                send_name.getText().toString(),
+                send_phone.getText().toString(),
+                send_addr.getText().toString(),
+                send_addr_info.getText().toString(),
+                recive_name.getText().toString(),
+                recive_phone.getText().toString(),
+                recive_addr.getText().toString(),
+                recive_addr_info.getText().toString(),
+                send_time.getText().toString(),
+                recive_time.getText().toString(),
+                "dispatching")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JsonBean<OrderCustomer>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull JsonBean<OrderCustomer> orderCustomerJsonBean) {
+                        if(orderCustomerJsonBean.getError_code() == 0){
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                        showSnackar(view, "获取失败：" + e.getLocalizedMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
 	

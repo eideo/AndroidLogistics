@@ -56,4 +56,8 @@ dependencies {
     //省市区三级联动
     //https://github.com/crazyandcoder/citypicker
     compile 'liji.library.dev:citypickerview:1.1.0'
+    //MD日期选择器
+    //compile 'com.wdullaer:materialdatetimepicker:3.2.2'
+    compile 'co.infinum:materialdatetimepicker-support:3.2.2'
+    compile 'com.afollestad.material-dialogs:core:0.9.4.5'
 }

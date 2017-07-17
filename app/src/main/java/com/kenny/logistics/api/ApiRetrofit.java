@@ -7,10 +7,12 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.kenny.logistics.model.response.JsonBean;
+import com.kenny.logistics.model.response.PageResponse;
+import com.kenny.logistics.model.response.order.OrderCustomer;
+import com.kenny.logistics.model.response.order.OrderSet;
 import com.kenny.logistics.model.response.user.UserToken;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.util.Date;
 
 import io.reactivex.Observable;
@@ -23,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ApiRetrofit{
 
-    public UserApi userApi;
+    public ServiceApi userApi;
     public static ApiRetrofit mInstance;
 
     private ApiRetrofit() {
@@ -41,12 +43,12 @@ public class ApiRetrofit{
 
         //在构造方法中完成对Retrofit接口的初始化
         userApi = new Retrofit.Builder()
-                .baseUrl(UserApi.BASE_URL)
+                .baseUrl(ServiceApi.BASE_URL)
                 //.client(getClient())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
-                .create(UserApi.class);
+                .create(ServiceApi.class);
     }
 
     public static ApiRetrofit getInstance() {
@@ -65,5 +67,22 @@ public class ApiRetrofit{
         return userApi.login_phone(phone,password);
     }
 
+    public Observable<JsonBean<OrderCustomer>> insert_customer(String token,
+                                                               String send_name,
+                                                               String send_phone,
+                                                               String send_addr,
+                                                               String send_addr_info,
+                                                               String recive_name,
+                                                               String recive_phone,
+                                                               String recive_addr,
+                                                               String recive_addr_info,
+                                                               String send_time,
+                                                               String recive_time,
+                                                               String dispatching_type){
+        return userApi.insert_customer(token,send_name,send_phone,send_addr,send_addr_info,recive_name,recive_phone,recive_addr,recive_addr_info,send_time,recive_time,dispatching_type);
+    }
 
+    public Observable<JsonBean<PageResponse<OrderSet>>> getOrderSet(){
+        return userApi.getOrderSet();
+    }
 }

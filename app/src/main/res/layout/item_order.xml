@@ -8,6 +8,7 @@
     android:background="#ecf0f1">
 
     <LinearLayout
+        android:id="@+id/ly"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#1296db"
@@ -33,7 +34,7 @@
             android:src="@mipmap/ic_order_0" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/tv_order_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -42,7 +43,7 @@
             android:text="订单号" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/tv_order_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -75,13 +76,13 @@
                 android:src="@mipmap/ic_order_map2" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_send_addr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/imageView2"
-                android:textColor="#1296db"
-                android:text="发货地址" />
+                android:text="发货地址"
+                android:textColor="#1296db" />
         </RelativeLayout>
 
 
@@ -108,13 +109,13 @@
                 android:src="@mipmap/ic_order_map1"/>
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_recive_addr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/imageView4"
-                android:textColor="#d4237a"
-                android:text="收货地址" />
+                android:text="收货地址"
+                android:textColor="#d4237a" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -129,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="货物信息" />
+            android:text="货物信息：无" />
     </LinearLayout>
 
     <LinearLayout
@@ -147,14 +148,14 @@
         android:layout_marginTop="5dp">
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tv_recive_addr_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="收货地" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/tv_recive_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -174,7 +175,7 @@
         android:layout_marginTop="5dp">
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/tv_driver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -182,11 +183,11 @@
             android:text="司机信息" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/tv_car"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView9"
+            android:layout_below="@+id/tv_driver"
             android:text="车辆信息" />
 
         <ImageView

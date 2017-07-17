@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidLogistics.iml" filepath="$PROJECT_DIR$/AndroidLogistics.iml" />
       <module fileurl="file://$PROJECT_DIR$/Logistics.iml" filepath="$PROJECT_DIR$/Logistics.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logistics_driver/logistics_driver.iml" filepath="$PROJECT_DIR$/logistics_driver/logistics_driver.iml" />
       <module fileurl="file://$PROJECT_DIR$/logistics_driver/logistics_driver.iml" filepath="$PROJECT_DIR$/logistics_driver/logistics_driver.iml" />
     </modules>
   </component>
